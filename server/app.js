@@ -11,28 +11,25 @@ import taskRouter from "./routes/taskRouter.js";
 const app = express();
 dotenv.config({ path: "./config/config.env" });
 
-
-app.use(express.json());
-
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "PUT", "DELETE", "POST"],
-    credentials: true,
-  })
-);
+// CORS middleware configuration
+app.use(cors({
+  origin: [process.env.FRONTEND_URL], // Allow requests from your frontend domain
+  methods: ["GET", "PUT", "POST", "DELETE"], // Allowed HTTP methods
+  credentials: true, // Allow cookies and credentials to be sent
+}));
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// Define your API routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/task", taskRouter);
 
-
+// Connect to MongoDB or any other database
 dbConnection();
 
+// Error handling middleware
 app.use(errorMiddleware);
 
 export default app;
